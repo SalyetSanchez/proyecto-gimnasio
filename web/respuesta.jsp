@@ -1,197 +1,164 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+    String usuario = (String) session.getAttribute("usuario");
+
+    if (usuario == null || usuario.trim().isEmpty()) {
+        response.sendRedirect(
+            request.getContextPath() + "/formulario.jsp"
+        );
+        return;
+    }
+
+    String usuarioSeguro = usuario
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace("\"", "&quot;")
+        .replace("'", "&#39;");
+%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultado de la Consulta</title>
+    <title>Bienvenida | Vital Center</title>
+
     <style>
+        :root {
+            --naranja: #E08343;
+            --naranja-oscuro: #C76B2E;
+            --negro: #171717;
+            --gris: #F8F9FA;
+        }
+
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Arial, sans-serif;
         }
 
         body {
-            background-color: #f8f9fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
-        }
-
-        /* Contenedor principal de dos columnas */
-        .response-wrapper {
+            margin: 0;
             display: flex;
-            width: 100%;
-            max-width: 950px;
-            background: #ffffff;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin: 20px;
-        }
-
-        /* Columna izquierda: Imagen decorativa */
-        .image-container {
-            flex: 1;
-            background-image: url('https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?q=80&w=800&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            min-height: 480px;
-        }
-
-        /* Columna derecha: Fondo claro contenedor del card */
-        .form-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 30px;
-            background-color: #fcfcfc;
+            justify-content: center;
+            padding: 24px;
+            background: var(--gris);
+            color: var(--negro);
+            font-family: Arial, Helvetica, sans-serif;
         }
 
-        /* Tarjeta terracota / naranja alineada con el login */
-        .card-orange {
-            background-color: #e08343;
+        .tarjeta {
             width: 100%;
-            max-width: 360px;
-            padding: 35px 25px;
-            border-radius: 25px;
-            color: #ffffff;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            text-align: left;
+            max-width: 650px;
+            padding: 55px 35px;
+            border-radius: 18px;
+            background: white;
+            text-align: center;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.09);
         }
 
-        .card-orange h2 {
-            font-size: 1.8rem;
-            color: #2c2c2c;
-            text-align: center;
-            margin-bottom: 20px;
+        .marca {
+            margin-bottom: 35px;
+            font-size: 22px;
             font-weight: 800;
+            letter-spacing: 1px;
         }
 
-        /* Contenedor interno para los datos recibidos */
-        .data-box {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 20px;
+        .marca span {
+            color: var(--naranja);
         }
 
-        .data-item {
-            margin-bottom: 12px;
+        .icono {
+            width: 76px;
+            height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            background: #fff0e5;
+            color: var(--naranja-oscuro);
+            font-size: 38px;
         }
 
-        .data-item:last-child {
-            margin-bottom: 0;
+        h1 {
+            margin: 0 0 15px;
+            font-size: clamp(28px, 5vw, 40px);
         }
 
-        .data-item span.label {
-            display: block;
-            font-size: 0.85rem;
-            color: #2c2c2c;
-            font-weight: bold;
-            text-transform: uppercase;
+        p {
+            color: #666;
+            line-height: 1.7;
         }
 
-        .data-item span.value {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #ffffff;
+        .usuario {
+            color: var(--naranja-oscuro);
         }
 
-        .badge-status {
+        .botones {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .boton {
             display: inline-block;
-            background-color: #2e7d32;
-            color: #ffffff;
-            padding: 4px 10px;
+            padding: 14px 22px;
             border-radius: 8px;
-            font-size: 0.9rem;
+            background: var(--naranja);
+            color: white;
             font-weight: bold;
-            margin-top: 4px;
-        }
-
-        /* Botones alineados con el estilo gris del login */
-        .btn-submit {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background-color: #4a4d52;
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: bold;
-            text-align: center;
             text-decoration: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: background-color 0.2s ease;
-            margin-bottom: 10px;
         }
 
-        .btn-submit:hover {
-            background-color: #333538;
+        .boton:hover {
+            background: var(--naranja-oscuro);
         }
 
-        .back-link {
-            text-align: center;
-            margin-top: 10px;
+        .boton-secundario {
+            border: 1px solid #ddd;
+            background: white;
+            color: var(--negro);
         }
 
-        .back-link a {
-            color: #333333;
-            font-size: 0.85rem;
-            text-decoration: underline;
-        }
-
-        /* Ajuste para pantallas pequeñas */
-        @media (max-width: 768px) {
-            .image-container {
-                display: none;
-            }
+        .boton-secundario:hover {
+            background: #f1f1f1;
         }
     </style>
 </head>
+
 <body>
+    <main class="tarjeta">
+        <div class="marca">VITAL <span>CENTER</span></div>
 
-    <div class="response-wrapper">
-        <!-- Columna Izquierda: Imagen del gimnasio -->
-        <div class="image-container"></div>
+        <div class="icono" aria-hidden="true">&#10003;</div>
 
-        <!-- Columna Derecha: Tarjeta de Respuesta del Servlet -->
-        <div class="form-container">
-            <div class="card-orange">
-                <h2>Estado del Socio</h2>
+        <h1>¡Bienvenido a Vital Center!</h1>
 
-                <!-- Bloque donde se muestran los datos procesados -->
-                <div class="data-box">
-                    <div class="data-item">
-                        <span class="label">Documento:</span>
-                        <span class="value"><%= request.getParameter("documento") != null ? request.getParameter("documento") : "No proporcionado" %></span>
-                    </div>
+        <p>
+            Hola, <strong class="usuario"><%= usuarioSeguro %></strong>.
+            <br>
+            Has iniciado sesión correctamente.
+        </p>
 
-                    <div class="data-item">
-                        <span class="label">Estado del Pase:</span>
-                        <span class="badge-status">Socio Activo</span>
-                    </div>
+        <p>
+            Tu espacio para avanzar hacia tus objetivos
+            de entrenamiento comienza aquí.
+        </p>
 
-                    <div class="data-item">
-                        <span class="label">Membresía:</span>
-                        <span class="value">Plan Trimestral VIP</span>
-                    </div>
-                </div>
+        <div class="botones">
+            <a
+                class="boton"
+                href="<%= request.getContextPath() %>/index.jsp"
+            >Volver al inicio</a>
 
-                <!-- Botones de navegación -->
-                <a href="formulario.jsp" class="btn-submit">Nueva consulta</a>
-
-                <div class="back-link">
-                    <a href="index.jsp">Volver al inicio</a>
-                </div>
-            </div>
+            <a
+                class="boton boton-secundario"
+                href="<%= request.getContextPath() %>/cerrar-sesion"
+            >Cerrar sesión</a>
         </div>
-    </div>
-
+    </main>
 </body>
 </html>

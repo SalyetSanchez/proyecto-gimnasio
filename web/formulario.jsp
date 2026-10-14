@@ -1,186 +1,424 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión / Consulta</title>
+    <title>Iniciar sesión | Vital Center</title>
+
     <style>
+        :root {
+            --naranja: #E08343;
+            --naranja-oscuro: #C76B2E;
+            --negro: #171717;
+            --gris: #F8F9FA;
+            --borde: #D8D8D8;
+        }
+
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Arial, sans-serif;
         }
 
         body {
-            background-color: #f8f9fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin: 0;
             min-height: 100vh;
-        }
-
-        /* Contenedor principal de dos columnas */
-        .login-wrapper {
             display: flex;
-            width: 100%;
-            max-width: 950px;
-            background: #ffffff;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin: 20px;
-        }
-
-        /* Columna izquierda: Imagen decorativa */
-        .image-container {
-            flex: 1;
-            background-image: url('https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?q=80&w=800&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            min-height: 480px;
-        }
-
-        /* Columna derecha: Fondo claro contenedor del card */
-        .form-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 30px;
-            background-color: #fcfcfc;
+            justify-content: center;
+            padding: 24px;
+            background: var(--gris);
+            color: var(--negro);
+            font-family: Arial, Helvetica, sans-serif;
         }
 
-        /* Tarjeta color naranja con bordes redondeados */
-        .card-orange {
-            background-color: #e08343;
+        .contenedor {
             width: 100%;
-            max-width: 360px;
-            padding: 40px 30px;
-            border-radius: 25px;
-            color: #333333;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            text-align: left;
+            max-width: 1050px;
+            min-height: 610px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            overflow: hidden;
+            border-radius: 18px;
+            background: white;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.12);
         }
 
-        .card-orange h2 {
-            font-size: 2rem;
-            color: #2c2c2c;
-            text-align: center;
-            margin-bottom: 25px;
+        .panel-imagen {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 45px;
+            color: white;
+            background:
+                linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.88),
+                    rgba(0, 0, 0, 0.12)
+                ),
+                linear-gradient(135deg, #37302b, #E08343);
+        }
+
+        .marca {
+            margin-bottom: auto;
+            font-size: 23px;
             font-weight: 800;
+            letter-spacing: 1px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        .marca span {
+            color: var(--naranja);
         }
 
-        .form-group label {
+        .panel-imagen h1 {
+            margin: 0 0 15px;
+            font-size: clamp(32px, 4vw, 46px);
+            line-height: 1.1;
+        }
+
+        .panel-imagen p {
+            max-width: 360px;
+            line-height: 1.7;
+            color: #eeeeee;
+        }
+
+        .panel-formulario {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 55px 45px;
+        }
+
+        .panel-formulario h2 {
+            margin: 0 0 10px;
+            font-size: 30px;
+        }
+
+        .subtitulo {
+            margin: 0 0 32px;
+            color: #6d6d6d;
+            line-height: 1.6;
+        }
+
+        .campo {
+            margin-bottom: 21px;
+        }
+
+        label {
             display: block;
-            color: #ffffff;
-            font-size: 1.05rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: none;
-            border-radius: 12px;
-            background-color: #d8d8d8;
-            font-size: 1rem;
-            outline: none;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .forgot-pass {
-            text-align: right;
-            margin-top: -10px;
-            margin-bottom: 25px;
-        }
-
-        .forgot-pass a {
-            color: #333333;
-            font-size: 0.82rem;
-            text-decoration: underline;
-        }
-
-        /* Botón gris oscuro oscurecido al hacer hover */
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background-color: #4a4d52;
-            color: #ffffff;
-            border: none;
-            border-radius: 15px;
-            font-size: 1.1rem;
+            margin-bottom: 9px;
+            font-size: 14px;
             font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid var(--borde);
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: var(--naranja);
+            box-shadow: 0 0 0 3px rgba(224, 131, 67, 0.15);
+        }
+
+        .clave-contenedor {
+            display: flex;
+            gap: 8px;
+        }
+
+        .clave-contenedor input {
+            min-width: 0;
+        }
+
+        .mostrar-clave {
+            padding: 0 12px;
+            border: 1px solid var(--borde);
+            border-radius: 8px;
+            background: white;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: background-color 0.2s ease;
         }
 
-        .btn-submit:hover {
-            background-color: #333538;
+        .recordar {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin: 2px 0 25px;
+            font-size: 14px;
+            color: #555;
         }
 
-        .create-account {
+        .recordar input {
+            width: auto;
+            accent-color: var(--naranja);
+        }
+
+        .boton {
+            width: 100%;
+            padding: 15px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--naranja);
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .boton:hover {
+            background: var(--naranja-oscuro);
+        }
+
+        .boton:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+
+        .mensaje {
+            display: none;
+            margin: 18px 0 0;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .mensaje.visible {
+            display: block;
+        }
+
+        .mensaje.exito {
+            color: #176534;
+            background: #e8f6ec;
+        }
+
+        .mensaje.error {
+            color: #9b2226;
+            background: #fff0f0;
+        }
+
+        .volver {
+            margin-top: 25px;
             text-align: center;
-            margin-top: 15px;
+            font-size: 14px;
         }
 
-        .create-account a {
-            color: #333333;
-            font-size: 0.85rem;
+        a {
+            color: var(--naranja-oscuro);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
             text-decoration: underline;
         }
 
-        /* Ajuste para pantallas pequeñas */
-        @media (max-width: 768px) {
-            .image-container {
-                display: none;
+        @media (max-width: 760px) {
+            body {
+                padding: 12px;
+            }
+
+            .contenedor {
+                max-width: 470px;
+                grid-template-columns: 1fr;
+            }
+
+            .panel-imagen {
+                min-height: 230px;
+                padding: 28px;
+            }
+
+            .panel-imagen h1 {
+                font-size: 31px;
+            }
+
+            .panel-formulario {
+                padding: 35px 25px;
             }
         }
     </style>
 </head>
+
 <body>
+    <main class="contenedor">
 
-    <div class="login-wrapper">
-        <!-- Columna Izquierda: Imagen del gimnasio -->
-        <div class="image-container"></div>
+        <section class="panel-imagen">
+            <div class="marca">VITAL <span>CENTER</span></div>
 
-        <!-- Columna Derecha: Tarjeta de Login / Consulta -->
-        <div class="form-container">
-            <div class="card-orange">
-                <h2>Iniciar sesión</h2>
-                
-                <form action="ControllerServlet" method="GET">
-                    <div class="form-group">
-                        <label for="usuario">Usuario:</label>
-                        <!-- Se asigna el name="documento" para mantener compatibilidad con tu Servlet -->
-                        <input type="text" id="usuario" name="documento" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="clave">Clave:</label>
-                        <input type="password" id="clave" name="clave">
-                    </div>
-
-                    <div class="forgot-pass">
-                        <a href="#">¿Olvidaste tu contraseña?</a>
-                    </div>
-
-                    <button type="submit" class="btn-submit">Iniciar sesión</button>
-
-                    <div class="create-account">
-                        <a href="index.jsp">Crear usuario</a>
-                    </div>
-                </form>
+            <div>
+                <h1>Tu esfuerzo.<br>Tu evolución.</h1>
+                <p>
+                    Cada día es una nueva oportunidad para acercarte
+                    a la mejor versión de ti.
+                </p>
             </div>
-        </div>
-    </div>
+        </section>
 
+        <section class="panel-formulario">
+            <h2>¡Qué bueno verte!</h2>
+            <p class="subtitulo">
+                Ingresa tus datos para acceder a tu cuenta.
+            </p>
+
+            <form id="loginForm">
+                <div class="campo">
+                    <label for="usuario">Usuario</label>
+                    <input
+                        type="text"
+                        id="usuario"
+                        name="usuario"
+                        placeholder="Ingresa tu usuario"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="clave">Contraseña</label>
+                    <div class="clave-contenedor">
+                        <input
+                            type="password"
+                            id="clave"
+                            name="clave"
+                            placeholder="Ingresa tu contraseña"
+                            autocomplete="current-password"
+                            required
+                        >
+                        <button
+                            type="button"
+                            id="mostrarClave"
+                            class="mostrar-clave"
+                            aria-label="Mostrar u ocultar contraseña"
+                        >Ver</button>
+                    </div>
+                </div>
+
+                <label class="recordar">
+                    <input type="checkbox" id="recordarUsuario">
+                    Recordar mi usuario en este dispositivo
+                </label>
+
+                <button type="submit" id="submitButton" class="boton">
+                    INICIAR SESIÓN →
+                </button>
+
+                <div
+                    id="message"
+                    class="mensaje"
+                    role="status"
+                    aria-live="polite"
+                ></div>
+            </form>
+
+            <div class="volver">
+                <a href="${pageContext.request.contextPath}/index.jsp">
+                    ← Volver al inicio
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const contexto = "${pageContext.request.contextPath}";
+        const loginForm = document.getElementById("loginForm");
+        const usuarioInput = document.getElementById("usuario");
+        const claveInput = document.getElementById("clave");
+        const recordarUsuario = document.getElementById("recordarUsuario");
+        const submitButton = document.getElementById("submitButton");
+        const message = document.getElementById("message");
+        const mostrarClave = document.getElementById("mostrarClave");
+
+        function showMessage(texto, tipo) {
+            message.textContent = texto;
+            message.className = "mensaje visible " + tipo;
+        }
+
+        // Recordar el nombre de usuario, nunca la contraseña.
+        try {
+            const usuarioGuardado = localStorage.getItem("vitalCenterUsuario");
+
+            if (usuarioGuardado) {
+                usuarioInput.value = usuarioGuardado;
+                recordarUsuario.checked = true;
+            }
+        } catch (error) {
+            console.warn("El almacenamiento local no está disponible.");
+        }
+
+        mostrarClave.addEventListener("click", function () {
+            const oculta = claveInput.type === "password";
+            claveInput.type = oculta ? "text" : "password";
+            mostrarClave.textContent = oculta ? "Ocultar" : "Ver";
+        });
+
+        loginForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            message.className = "mensaje";
+            message.textContent = "";
+            submitButton.disabled = true;
+            submitButton.textContent = "VERIFICANDO...";
+
+            const datos = new URLSearchParams();
+            datos.append("accion", "login");
+            datos.append("usuario", usuarioInput.value.trim());
+            datos.append("clave", claveInput.value);
+
+            try {
+                const response = await fetch(contexto + "/api/auth", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded;charset=UTF-8"
+                    },
+                    credentials: "same-origin",
+                    body: datos.toString()
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || result.status !== "exito") {
+                    throw new Error(
+                        result.mensaje || "No fue posible iniciar sesión."
+                    );
+                }
+
+                try {
+                    if (recordarUsuario.checked) {
+                        localStorage.setItem(
+                            "vitalCenterUsuario",
+                            usuarioInput.value.trim()
+                        );
+                    } else {
+                        localStorage.removeItem("vitalCenterUsuario");
+                    }
+                } catch (error) {
+                    console.warn("No fue posible guardar la preferencia.");
+                }
+
+                showMessage(
+                    "¡Autenticación satisfactoria! Redirigiendo...",
+                    "exito"
+                );
+
+                // La sesión se crea en el servlet antes de esta redirección.
+                window.location.assign(contexto + "/respuesta.jsp");
+
+            } catch (error) {
+                showMessage(
+                    error.message || "No fue posible conectar con el servidor.",
+                    "error"
+                );
+
+                submitButton.disabled = false;
+                submitButton.textContent = "INICIAR SESIÓN →";
+            }
+        });
+    </script>
 </body>
 </html>
