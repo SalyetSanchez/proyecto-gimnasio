@@ -1,8 +1,6 @@
 package com.gimnasio;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 
 import com.gimnasio.dao.UsuarioDAO;
 
@@ -47,13 +45,13 @@ public class ControllerServlet extends HttpServlet {
         String direccion = limpiar(request.getParameter("direccion"));
 
         // Validar los campos obligatorios.
-        if (nombres.isEmpty()
-                || apellidos.isEmpty()
-                || documento.isEmpty()
-                || telefono.isEmpty()
-                || correo.isEmpty()
-                || fechaNacimiento.isEmpty()) {
-
+if (!ValidacionesRegistro.camposObligatoriosCompletos(
+        nombres,
+        apellidos,
+        documento,
+        telefono,
+        correo,
+        fechaNacimiento)) {
             mostrarResultado(
                 request, response,
                 HttpServletResponse.SC_BAD_REQUEST,
@@ -64,28 +62,15 @@ public class ControllerServlet extends HttpServlet {
         }
 
         // Validar el formato de la fecha y evitar fechas futuras.
-        try {
-            LocalDate fecha = LocalDate.parse(fechaNacimiento);
-
-            if (fecha.isAfter(LocalDate.now())) {
-                mostrarResultado(
-                    request, response,
-                    HttpServletResponse.SC_BAD_REQUEST,
-                    "Fecha no válida",
-                    "La fecha de nacimiento no puede ser futura."
-                );
-                return;
-            }
-
-        } catch (DateTimeParseException e) {
-            mostrarResultado(
-                request, response,
-                HttpServletResponse.SC_BAD_REQUEST,
-                "Fecha no válida",
-                "Ingresa una fecha de nacimiento válida."
-            );
-            return;
-        }
+if (!ValidacionesRegistro.fechaNacimientoValida(fechaNacimiento)) {
+    mostrarResultado(
+        request, response,
+        HttpServletResponse.SC_BAD_REQUEST,
+        "Fecha no válida",
+        "Ingresa una fecha de nacimiento válida que no sea futura."
+    );
+    return;
+}
 
         // Integrar el controlador con el DAO y la base de datos.
         UsuarioDAO usuarioDAO = new UsuarioDAO();
